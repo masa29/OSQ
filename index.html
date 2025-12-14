@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>鬼教官スクワット</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <div id="app">
+        <!-- スタート画面 -->
+        <div id="start-screen" class="screen active">
+            <div class="military-bg"></div>
+            <div class="content">
+                <h1 class="title">
+                    <span class="title-icon">👹</span>
+                    <span class="title-text">鬼教官スクワット</span>
+                </h1>
+                <p class="subtitle">甘えは許さん！限界を超えろ！</p>
+
+                <div class="goal-input-section">
+                    <h2>目標回数を入力せよ！</h2>
+                    <div class="goal-input-container">
+                        <button class="goal-btn minus" id="goal-minus">−</button>
+                        <input type="number" id="goal-input" value="20" min="5" max="100">
+                        <button class="goal-btn plus" id="goal-plus">＋</button>
+                        <span class="goal-unit">回</span>
+                    </div>
+                    <p class="goal-hint">※目標は目安だ。終わりは俺が決める！</p>
+                </div>
+
+                <div class="instructions">
+                    <h2>心得</h2>
+                    <div class="instruction-list">
+                        <div class="instruction-item">
+                            <span class="instruction-number">壱</span>
+                            <span class="instruction-text">9拍で1スクワット（5秒で下げ、4秒で上げる）</span>
+                        </div>
+                        <div class="instruction-item">
+                            <span class="instruction-number">弐</span>
+                            <span class="instruction-text">浅いスクワットは許さん</span>
+                        </div>
+                        <div class="instruction-item">
+                            <span class="instruction-number">参</span>
+                            <span class="instruction-text">音声でカウントするから聞け</span>
+                        </div>
+                    </div>
+                </div>
+
+                <button id="start-btn" class="btn-primary">
+                    <span class="btn-icon">📷</span>
+                    訓練開始
+                </button>
+            </div>
+        </div>
+
+        <!-- キャリブレーション画面 -->
+        <div id="calibration-screen" class="screen">
+            <div class="military-bg"></div>
+            <div class="calibration-container">
+                <div class="video-container">
+                    <video id="video" autoplay playsinline></video>
+                    <canvas id="pose-canvas"></canvas>
+                    <div class="fullbody-overlay" id="fullbody-overlay">
+                        <p>全身を映せ！</p>
+                    </div>
+                </div>
+
+                <div class="calibration-info">
+                    <h2>準備運動</h2>
+                    <p class="calibration-instruction" id="calibration-text">
+                        全身をカメラに映せ！
+                    </p>
+                    <div class="calibration-status" id="calibration-status">
+                        <div class="status-icon">🔍</div>
+                        <div class="status-text">検出中...</div>
+                    </div>
+                    <div class="calibration-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="calibration-progress"></div>
+                        </div>
+                        <span class="progress-text" id="progress-text">0%</span>
+                    </div>
+                    <div class="calibration-timer" id="calibration-timer"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- トレーニング画面 -->
+        <div id="training-screen" class="screen">
+            <canvas id="training-canvas"></canvas>
+
+            <!-- カメラプレビュー -->
+            <div class="camera-preview">
+                <video id="preview-video" autoplay playsinline></video>
+                <canvas id="preview-canvas"></canvas>
+            </div>
+
+            <!-- 教官の顔 -->
+            <div class="sergeant-face" id="sergeant-face">
+                <div class="face-emoji">👹</div>
+            </div>
+
+            <!-- メッセージ表示 -->
+            <div class="message-display" id="message-display">
+                <p id="message-text">準備はいいか！</p>
+            </div>
+
+            <!-- カウント表示 -->
+            <div class="count-display">
+                <div class="current-count" id="current-count">0</div>
+                <div class="goal-display">目標: <span id="goal-display">20</span></div>
+            </div>
+
+            <!-- 追加訓練オーバーレイ -->
+            <div class="extra-training-overlay" id="extra-training-overlay">
+                <div class="extra-training-banner">
+                    <span class="extra-icon">🔥</span>
+                    <span class="extra-text">追加訓練</span>
+                    <span class="extra-icon">🔥</span>
+                </div>
+                <div class="extra-message">俺がいいと言うまでやれ！</div>
+            </div>
+
+            <!-- テンポインジケーター（9拍：5秒下げ + 4秒上げ） -->
+            <div class="tempo-display" id="tempo-display">
+                <div class="tempo-circle" id="tempo-circle">
+                    <div class="tempo-beat-number" id="tempo-beat-number">1</div>
+                </div>
+                <div class="tempo-beats">
+                    <span class="beat-dot down" data-beat="1">●</span>
+                    <span class="beat-dot down" data-beat="2">●</span>
+                    <span class="beat-dot down" data-beat="3">●</span>
+                    <span class="beat-dot down" data-beat="4">●</span>
+                    <span class="beat-dot down" data-beat="5">●</span>
+                    <span class="beat-separator">|</span>
+                    <span class="beat-dot up" data-beat="6">●</span>
+                    <span class="beat-dot up" data-beat="7">●</span>
+                    <span class="beat-dot up" data-beat="8">●</span>
+                    <span class="beat-dot up" data-beat="9">●</span>
+                </div>
+                <div class="tempo-phase-labels">
+                    <span class="phase-down">↓下げ</span>
+                    <span class="phase-up">↑上げ</span>
+                </div>
+                <div class="tempo-labels">
+                    <div class="tempo-label-sub">5秒で下げ → 4秒で上げ</div>
+                </div>
+            </div>
+
+            <!-- 深さインジケーター -->
+            <div class="depth-indicator">
+                <div class="depth-bar">
+                    <div class="depth-fill" id="depth-fill"></div>
+                    <div class="depth-threshold"></div>
+                </div>
+                <div class="depth-text">深さ</div>
+            </div>
+        </div>
+
+        <!-- 結果画面 -->
+        <div id="result-screen" class="screen">
+            <div class="military-bg"></div>
+            <div class="result-content">
+                <div class="sergeant-result">
+                    <div class="face-emoji large">👹</div>
+                </div>
+                <p class="result-message" id="result-message">まあ、合格だ</p>
+                
+                <div class="result-stats">
+                    <div class="stat-item highlight">
+                        <span class="stat-label">総回数</span>
+                        <span class="stat-value" id="final-count">0</span>
+                        <span class="stat-unit">回</span>
+                    </div>
+                    <div class="stat-breakdown">
+                        <div class="breakdown-item">
+                            <span class="breakdown-label">深い</span>
+                            <span class="breakdown-value" id="result-deep">0</span>
+                        </div>
+                        <div class="breakdown-item">
+                            <span class="breakdown-label">普通</span>
+                            <span class="breakdown-value" id="result-medium">0</span>
+                        </div>
+                        <div class="breakdown-item shallow">
+                            <span class="breakdown-label">浅い</span>
+                            <span class="breakdown-value" id="result-shallow">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <button id="restart-btn" class="btn-primary">
+                    <span class="btn-icon">🔄</span>
+                    もう一度訓練
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MediaPipe -->
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/pose/pose.js" crossorigin="anonymous"></script>
+
+    <script src="pose.js"></script>
+    <script src="sergeant.js"></script>
+    <script src="main.js"></script>
+</body>
+
+</html>
+
