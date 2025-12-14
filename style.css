@@ -275,6 +275,49 @@ body {
     font-size: 1.5rem;
 }
 
+/* 免責事項 */
+.disclaimer {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: rgba(50, 50, 50, 0.8);
+    border: 2px solid #666;
+    border-radius: 4px;
+    text-align: left;
+}
+
+.disclaimer h3 {
+    font-size: 1rem;
+    color: #ffcc00;
+    margin-bottom: 0.8rem;
+}
+
+.disclaimer ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 0.8rem 0;
+}
+
+.disclaimer li {
+    font-size: 0.85rem;
+    color: #aaa;
+    padding: 0.3rem 0;
+    padding-left: 1.2rem;
+    position: relative;
+}
+
+.disclaimer li::before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: #888;
+}
+
+.disclaimer-note {
+    font-size: 0.8rem;
+    color: #ff6666;
+    margin-top: 0.5rem;
+}
+
 /* ========================================
    キャリブレーション画面
    ======================================== */
@@ -440,11 +483,10 @@ body {
 }
 
 .camera-preview {
-    display: none;
     position: absolute;
     bottom: 20px;
     left: 20px;
-    width: 320px;
+    width: 280px;
     aspect-ratio: 4/3;
     overflow: hidden;
     border: 3px solid var(--color-khaki);
